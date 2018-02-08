@@ -1,0 +1,11 @@
+MIS(10) = 0.10
+MIS(20) = 0.50
+MIS(30) = 0.30
+MIS(40) = 0.40
+MIS(50) = 0.80
+MIS(60) = 0.40
+MIS(70) = 0.70
+MIS(80) = 0.20
+SDC = 0.4
+cannot_be_together: {30, 60}
+must-have: 30 or 60
