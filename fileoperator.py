@@ -2,7 +2,7 @@ from os import path, listdir
 from preprocess import Preprocess
 import re
 
-class Filereader :
+class FileOperator :
 	def __init__(self, datapath="", data="data", params="params", results="results"):
 		self._path = datapath
 		self._data = {
