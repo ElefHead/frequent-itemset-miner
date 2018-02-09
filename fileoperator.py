@@ -83,6 +83,9 @@ class FileOperator :
 		except FileNotFoundError:
 			raise Exception("Files not found")
 
+	def writeFrequentItemset():
+		pass
+
 	def writeResult(self):
 		pass
 	

@@ -40,9 +40,10 @@ def msApriori():
 				print(constraints['message'])
 			try:
 				for num_constraints in range(constraints['count']):
+					k = 1
 					(L, num_transactions) = init_pass(constraints['constraints'][num_constraints],f,number)
 					frequent = [(i[0],i[1]) for i in L if i[1]>=constraints['constraints'][num_constraints][i[0]]]
-					k = 1
+					specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k)
 					while(frequent != []):
 						k+=1
 						if k==2:
@@ -62,7 +63,9 @@ def msApriori():
 									if set_transaction.union(set_tail) == set_transaction :
 										tailcounts[str(c[0][1:])] = tailcounts[str(c[0][1:])]+1 if str(c[0][1:]) in tailcounts else 1
 						frequent = [c for c in candidate if c[1]>=constraints['constraints'][num_constraints][c[0][0]]]
-						print(frequent)
+						specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k)
+
+						# print(frequent)
 						# We got to write the frequent list
 			except Exception as e:
 				print(e)
@@ -100,6 +103,27 @@ def msCandidateGen(F,L,constraints, k):
 				if not notfrequent:
 					candidate.append([c,0])
 	return candidate
+
+def specificConstraints(frequent,not_together,must_have,k):
+	must_have_set = set(must_have) if len(must_have)>1 else {must_have}
+	requiredFrequent = []
+	for f in frequent:
+		good = True
+		if k==1:
+			fset = {f[0]}
+		else:
+			fset = set(f[0])
+		if len(fset.intersection(must_have_set))>=1:
+			for nt in not_together:
+				if len(fset.intersection(set(nt)))>1:
+					good = False
+		else:
+			good = False
+		if good:
+			requiredFrequent.append(f)
+	print(requiredFrequent)
+	return requiredFrequent
+
 	
 if __name__ == '__main__':
-	frequent = msApriori()
+	msApriori()
