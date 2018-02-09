@@ -9,7 +9,8 @@ class Preprocess:
 		"not_together":r"(cannot_be_together)\s*:\s*([{\d,\s}]*)",
 		"must_have":r"(must-have)\s*:\s*([\d\s(or)]+)",
 		"not_together_elements":r"\{*'*(\d+),*\s*(\d+)'*\}*",
-		"not_together_split":r"\}\s*,\s*\{"
+		"not_together_split":r"\}\s*,\s*\{",
+		"transaction":r"(\d+)"
 	}
 
 	def __new__(cls, *args, **kwargs):  
@@ -43,3 +44,9 @@ class Preprocess:
 			if(others):
 				processedConstraints[others.group(1)] = float(others.group(2))
 		return processedConstraints
+
+	def preprocessTransaction(self, transaction):
+		if transaction == "":
+			return transaction
+		processedTransaction = [int(i) for i in re.findall(self._patterns["transaction"], transaction)]
+		return processedTransaction
