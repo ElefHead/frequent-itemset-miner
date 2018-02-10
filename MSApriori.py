@@ -19,7 +19,13 @@ def init_pass(constraints, f, number):
 	index_i = None
 	for j in range(len(I)):
 		if not found_i:
-			if(I[j][1]/num_transactions >= constraints[I[j][0]]):
+			if I[j][0] in constraints:
+				mis = constraints[I[j][0]]
+			else:
+				mis = constraints['others']
+				constraints[I[j][0]] = mis
+
+			if(I[j][1]/num_transactions >= mis):
 				L.append(I[j])
 				found_i = True
 				index_i = int(j)
@@ -30,7 +36,7 @@ def init_pass(constraints, f, number):
 	return (L,num_transactions)
 
 def msApriori():
-	f = FileOperator(datapath="./",data="data2",params="params2",results="results2")
+	f = FileOperator(datapath="./",data="data",params="params",results="results")
 	results = f.getDatasetNumbers()
 	if(results["error"]):
 		print(results['message'])
@@ -43,6 +49,9 @@ def msApriori():
 				for num_constraints in range(constraints['count']):
 					k = 1
 					(L, num_transactions) = init_pass(constraints['constraints'][num_constraints],f,number)
+					for l in L:
+						if l[0] not in constraints['constraints'][num_constraints]:
+							constraints['constraints'][num_constraints][l[0]] = constraints['constraints'][num_constraints]['others']
 					frequent = [(i[0],i[1]) for i in L if i[1]/num_transactions>=constraints['constraints'][num_constraints][i[0]]]
 					f.writeFrequentItemset(specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k),None,k,number,num_constraints)
 					while(frequent != []):
