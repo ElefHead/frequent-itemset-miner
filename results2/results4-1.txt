@@ -1,0 +1,25 @@
+Frequent 1-itemsets: 
+	18 : { 80 }
+	30 : { 30 }
+	30 : { 20 }
+	46 : { 60 }
+	Total number of frequent 1-itemsets = 4
+
+Frequent 2-itemsets: 
+	13 : { 80, 60 }
+Tailcount: 46
+	22 : { 30, 70 }
+Tailcount: 41
+	20 : { 30, 60 }
+Tailcount: 46
+	26 : { 30, 50 }
+Tailcount: 58
+	46 : { 60, 50 }
+Tailcount: 58
+	Total number of frequent 2-itemsets = 5
+
+Frequent 3-itemsets: 
+	20 : { 30, 60, 50 }
+Tailcount: 46
+	Total number of frequent 3-itemsets = 1
+

@@ -1,0 +1,11 @@
+Frequent 1-itemsets: 
+	6 : { 20 }
+	Total number of frequent 1-itemsets = 1
+
+Frequent 2-itemsets: 
+	6 : { 80, 20 }
+Tailcount: 6
+	2 : { 90, 50 }
+Tailcount: 2
+	Total number of frequent 2-itemsets = 2
+
