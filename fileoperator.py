@@ -1,4 +1,4 @@
-from os import path, listdir
+from os import path, listdir, makedirs
 from preprocess import Preprocess
 import re
 
@@ -83,9 +83,29 @@ class FileOperator :
 		except FileNotFoundError:
 			raise Exception("Files not found")
 
-	def writeFrequentItemset():
-		pass
-
-	def writeResult(self):
-		pass
-	
+	def writeFrequentItemset(self,frequent,tailcounts=None,k=0,datanum="",paramnum=None):
+		if(frequent!=[] or k<=1):
+			filename = "results"+datanum
+			if(paramnum==None):
+				filename += ".txt"
+			else:
+				filename += "-"+str(paramnum+1)+".txt"
+			results_directory = path.join(self._path,self._data['results'])
+			if not path.exists(results_directory):
+				makedirs(results_directory)
+			absolute_path = path.join(results_directory, filename)
+			if path.exists(absolute_path):
+				write_mode = 'a'
+			else:
+				write_mode = 'w'
+			numfreq = len(frequent)
+			with open(absolute_path,write_mode) as w:
+				w.write("Frequent "+str(k)+"-itemsets: \n")
+				if k==1:
+					for f in frequent:
+						w.write("\t"+str(f[1])+" : "+ "{ " + str(f[0]) +" }\n")
+				else:
+					for i in range(numfreq):
+						w.write("\t"+str(frequent[i][1])+" : { "+ ", ".join([str (x) for x in frequent[i][0]])+" }\n")
+						w.write("Tailcount: "+str(tailcounts[str(frequent[i][0][1:])])+"\n")
+				w.write("\tTotal number of frequent "+str(k)+"-itemsets = "+str(numfreq)+"\n\n")

@@ -43,6 +43,10 @@ class Preprocess:
 			others = re.match(self._patterns['others'],line)
 			if(others):
 				processedConstraints[others.group(1)] = float(others.group(2))
+		if not 'not_together' in processedConstraints:
+			processedConstraints['not_together'] = ""
+		if not 'must_have' in processedConstraints:
+			processedConstraints['must_have'] = ""	
 		return processedConstraints
 
 	def preprocessTransaction(self, transaction):

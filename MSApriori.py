@@ -1,5 +1,6 @@
 from fileoperator import FileOperator
 from itertools import combinations
+import traceback as tb
 
 def init_pass(constraints, f, number):
 	I = dict()
@@ -12,24 +13,24 @@ def init_pass(constraints, f, number):
 			else:
 				I[item] = 1
 	I = dict(sorted(I.items())) #Lexicographic
-	I = [(i,I[i]/num_transactions) for i in sorted(I, key=constraints.get)] #based on MIS with support
+	I = [(i,I[i]) for i in sorted(I, key=constraints.get)] #based on MIS with support
 	L = []
 	found_i = False
 	index_i = None
 	for j in range(len(I)):
 		if not found_i:
-			if(I[j][1] >= constraints[I[j][0]]):
+			if(I[j][1]/num_transactions >= constraints[I[j][0]]):
 				L.append(I[j])
 				found_i = True
 				index_i = int(j)
 		else:
 			if(j-1>=0):
-				if I[j][1]>=constraints[I[index_i][0]] : 
+				if I[j][1]/num_transactions>=constraints[I[index_i][0]] : 
 					L.append(I[j]) 
 	return (L,num_transactions)
 
 def msApriori():
-	f = FileOperator(datapath="./",data="data",params="params")
+	f = FileOperator(datapath="./",data="data2",params="params2",results="results2")
 	results = f.getDatasetNumbers()
 	if(results["error"]):
 		print(results['message'])
@@ -42,46 +43,48 @@ def msApriori():
 				for num_constraints in range(constraints['count']):
 					k = 1
 					(L, num_transactions) = init_pass(constraints['constraints'][num_constraints],f,number)
-					frequent = [(i[0],i[1]) for i in L if i[1]>=constraints['constraints'][num_constraints][i[0]]]
-					specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k)
+					frequent = [(i[0],i[1]) for i in L if i[1]/num_transactions>=constraints['constraints'][num_constraints][i[0]]]
+					f.writeFrequentItemset(specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k),None,k,number,num_constraints)
 					while(frequent != []):
 						k+=1
 						if k==2:
-							candidate = level2CandidateGen(L,constraints['constraints'][num_constraints])
+							candidate = level2CandidateGen(L,constraints['constraints'][num_constraints],num_transactions)
 							L = dict(L)
 						else:
-							candidate = msCandidateGen(frequent,L,constraints['constraints'][num_constraints],k-1)
+							candidate = msCandidateGen(frequent,L,constraints['constraints'][num_constraints],k-1,num_transactions)
 						tailcounts = dict()
 						if candidate != []:
 							for transaction in f.getTransactions(setnumber=number):
 								set_transaction = set(transaction)
+								tailset = set()
 								for c in candidate:
 									set_c = set(c[0])
 									set_tail = set(c[0][1:])
 									if set_transaction.union(set_c) == set_transaction :
 										c[1]+=1
-									if set_transaction.union(set_tail) == set_transaction :
-										tailcounts[str(c[0][1:])] = tailcounts[str(c[0][1:])]+1 if str(c[0][1:]) in tailcounts else 1
-						frequent = [c for c in candidate if c[1]>=constraints['constraints'][num_constraints][c[0][0]]]
-						specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k)
+									if set_tail.issubset(set_transaction) and not set_tail.issubset(tailset) :
+										tailset.update(set_tail)
+										if str(c[0][1:]) in tailcounts :
+											tailcounts[str(c[0][1:])] += 1
+										else:
+											tailcounts[str(c[0][1:])] = 1
+						frequent = [c for c in candidate if c[1]/num_transactions>=constraints['constraints'][num_constraints][c[0][0]]]
+						f.writeFrequentItemset(specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k),tailcounts,k,number,num_constraints)
+			except Exception:
+				tb.print_exc()
 
-						# print(frequent)
-						# We got to write the frequent list
-			except Exception as e:
-				print(e)
-
-def level2CandidateGen(L,constraints):
+def level2CandidateGen(L,constraints,num_transactions):
 	sdc = constraints['SDC']
 	candidate = []
 	num = len(L)
 	for i in range(num):
 		if(L[i][1]>=constraints[L[i][0]]):
 			for h in range(i+1,num):
-				if L[h][1]>=constraints[L[i][0]] and abs(L[h][1] - L[i][1]) <= sdc:
+				if L[h][1]>=constraints[L[i][0]] and abs(L[h][1]/num_transactions - L[i][1]/num_transactions) <= sdc:
 					candidate.append([[L[i][0], L[h][0]],0])
 	return candidate
 
-def msCandidateGen(F,L,constraints, k):
+def msCandidateGen(F,L,constraints,k,num_transactions):
 	sdc = constraints['SDC']
 	candidate = []
 	num = len(F)
@@ -94,7 +97,7 @@ def msCandidateGen(F,L,constraints, k):
 			f2 = F[r][0]
 			f2head = f2[0:k-1]
 			f2last = f2[k-1]
-			if f1head == f2head and abs(L[f1last] - L[f2last]) <= sdc:
+			if f1head == f2head and abs(L[f1last]/num_transactions - L[f2last]/num_transactions) <= sdc:
 				c = f1 + [f2last]
 				notfrequent = False
 				for i in combinations(c, k):
@@ -113,7 +116,7 @@ def specificConstraints(frequent,not_together,must_have,k):
 			fset = {f[0]}
 		else:
 			fset = set(f[0])
-		if len(fset.intersection(must_have_set))>=1:
+		if len(fset.intersection(must_have_set))>=1 or must_have=="":
 			for nt in not_together:
 				if len(fset.intersection(set(nt)))>1:
 					good = False
@@ -121,7 +124,6 @@ def specificConstraints(frequent,not_together,must_have,k):
 			good = False
 		if good:
 			requiredFrequent.append(f)
-	print(requiredFrequent)
 	return requiredFrequent
 
 	
