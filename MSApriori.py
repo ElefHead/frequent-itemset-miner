@@ -36,7 +36,7 @@ def init_pass(constraints, f, number):
 	return (L,num_transactions)
 
 def msApriori():
-	f = FileOperator(datapath="./",data="data",params="params",results="results")
+	f = FileOperator(datapath="./",data="data2",params="params2",results="results2")
 	results = f.getDatasetNumbers()
 	if(results["error"]):
 		print(results['message'])
@@ -46,14 +46,14 @@ def msApriori():
 			if(constraints['error']):
 				print(constraints['message'])
 			try:
-				for num_constraints in range(constraints['count']):
+				for num_constraints in range(len(constraints['count'])):
 					k = 1
 					(L, num_transactions) = init_pass(constraints['constraints'][num_constraints],f,number)
 					for l in L:
 						if l[0] not in constraints['constraints'][num_constraints]:
 							constraints['constraints'][num_constraints][l[0]] = constraints['constraints'][num_constraints]['others']
 					frequent = [(i[0],i[1]) for i in L if i[1]/num_transactions>=constraints['constraints'][num_constraints][i[0]]]
-					f.writeFrequentItemset(specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k),None,k,number,num_constraints)
+					f.writeFrequentItemset(specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k),None,k,number,constraints['count'][num_constraints])
 					while(frequent != []):
 						k+=1
 						if k==2:
@@ -78,7 +78,7 @@ def msApriori():
 										else:
 											tailcounts[str(c[0][1:])] = 1
 						frequent = [c for c in candidate if c[1]/num_transactions>=constraints['constraints'][num_constraints][c[0][0]]]
-						f.writeFrequentItemset(specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k),tailcounts,k,number,num_constraints)
+						f.writeFrequentItemset(specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k),tailcounts,k,number,constraints['count'][num_constraints])
 			except Exception:
 				tb.print_exc()
 
@@ -87,9 +87,9 @@ def level2CandidateGen(L,constraints,num_transactions):
 	candidate = []
 	num = len(L)
 	for i in range(num):
-		if(L[i][1]>=constraints[L[i][0]]):
+		if(L[i][1]/num_transactions>=constraints[L[i][0]]):
 			for h in range(i+1,num):
-				if L[h][1]>=constraints[L[i][0]] and abs(L[h][1]/num_transactions - L[i][1]/num_transactions) <= sdc:
+				if L[h][1]/num_transactions>=constraints[L[i][0]] and abs(L[h][1]/num_transactions - L[i][1]/num_transactions) <= sdc:
 					candidate.append([[L[i][0], L[h][0]],0])
 	return candidate
 

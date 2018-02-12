@@ -1,8 +1,11 @@
 Frequent 1-itemsets: 
-	468 : { 2 }
 	381 : { 4 }
 	419 : { 10 }
+	388 : { 11 }
+	462 : { 47 }
+	468 : { 2 }
 	451 : { 16 }
+	443 : { 23 }
 	404 : { 26 }
 	808 : { 17 }
 	678 : { 19 }
@@ -11,30 +14,5 @@ Frequent 1-itemsets:
 	703 : { 37 }
 	775 : { 43 }
 	802 : { 6 }
-	Total number of frequent 1-itemsets = 12
-
-Frequent 2-itemsets: 
-	169 : { 2, 16 }
-Tailcount: 451
-	202 : { 2, 19 }
-Tailcount: 678
-	151 : { 2, 33 }
-Tailcount: 516
-	191 : { 2, 28 }
-Tailcount: 667
-	222 : { 2, 37 }
-Tailcount: 703
-	165 : { 4, 28 }
-Tailcount: 667
-	194 : { 10, 19 }
-Tailcount: 678
-	150 : { 10, 32 }
-Tailcount: 484
-	150 : { 10, 33 }
-Tailcount: 516
-	183 : { 10, 28 }
-Tailcount: 667
-	205 : { 10, 37 }
-Tailcount: 703
-	Total number of frequent 2-itemsets = 11
+	Total number of frequent 1-itemsets = 15
 

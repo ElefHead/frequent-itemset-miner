@@ -19,13 +19,13 @@ class FileOperator :
 		try:
 			preprocess = Preprocess()
 			absolute_path = path.join(self._path, self._data['params'])
-			count = 0
+			count = []
 			constraints = []
 			for filename in listdir(absolute_path):
 				match = re.match(self._patterns['params'],filename)
 				if match:
 					if(match.group(2) == setnumber):
-						count+=1
+						count.append(match.group(3))
 						with open(path.join(absolute_path,filename),"r") as c:
 							constraints.append(preprocess.preprocessConstraints(c.read().split("\n")))
 			if constraints == []:
@@ -86,10 +86,10 @@ class FileOperator :
 	def writeFrequentItemset(self,frequent,tailcounts=None,k=0,datanum="",paramnum=None):
 		if(frequent!=[] or k<=1):
 			filename = "results"+datanum
-			if(paramnum==None):
+			if(len(paramnum)==0):
 				filename += ".txt"
 			else:
-				filename += "-"+str(paramnum+1)+".txt"
+				filename += "-"+paramnum+".txt"
 			results_directory = path.join(self._path,self._data['results'])
 			if not path.exists(results_directory):
 				makedirs(results_directory)
