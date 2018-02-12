@@ -20,9 +20,9 @@ Please make sure that this is your folder structure (where the code resides)
 
 ![Directory Structure](https://github.com/ElefHead/frequent-itemset-miner/blob/master/img/dir_structure.png "Directory Structure")
 
-Inside MSApriori.py, line 39 : You can specify if your data resides in which directory. It is relative to the current directory, 
-so please keep that in mind. Same way for params and results. If there is no results directory, the code will create one with
-the name as specified here.  
+Inside MSApriori.py, line 39 : You can specify where your data resides. It is relative to the current directory.  
+Same way for params and results. If there is no results directory, the code will create one with
+the name as specified in this line.  
 
 ---
 
