@@ -2,6 +2,18 @@ from os import path, listdir, makedirs
 from preprocess import Preprocess
 import re
 
+def getNextTransaction(reader):
+	transaction = ""
+	while True:
+		char = reader.read(1)
+		transaction += char
+		if char == "}":
+			yield transaction
+			transaction = ""
+		if not char:
+			break
+
+
 class FileOperator :
 	def __init__(self, datapath="", data="data", params="params", results="results"):
 		self._path = datapath
@@ -69,6 +81,21 @@ class FileOperator :
 								and in the path, the filenames are of the form data.txt or data1.txt or data1-1.txt"""
 			}
 
+	# def getTransactions2(self, setnumber=""):
+	# 	preprocess = Preprocess()
+	# 	try:
+	# 		absolute_path = path.join(self._path, self._data['data'])
+	# 		for filename in listdir(absolute_path):
+	# 			match = re.match(self._patterns['data'],filename)
+	# 			if match:
+	# 				if(match.group(2)==setnumber):
+	# 					with open(path.join(absolute_path,match.group()),"r") as t:
+	# 						for transaction in t:
+	# 							yield preprocess.preprocessTransaction(transaction.strip())
+	# 	except FileNotFoundError:
+	# 		raise Exception("Files not found")
+
+
 	def getTransactions(self, setnumber=""):
 		preprocess = Preprocess()
 		try:
@@ -77,8 +104,9 @@ class FileOperator :
 				match = re.match(self._patterns['data'],filename)
 				if match:
 					if(match.group(2)==setnumber):
+						transaction = ""
 						with open(path.join(absolute_path,match.group()),"r") as t:
-							for transaction in t:
+							for transaction in getNextTransaction(t):
 								yield preprocess.preprocessTransaction(transaction.strip())
 		except FileNotFoundError:
 			raise Exception("Files not found")
