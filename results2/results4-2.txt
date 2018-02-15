@@ -18,8 +18,12 @@ Tailcount: 58
 
 Frequent 3-itemsets: 
 	7 : { 10, 30, 70 }
-Tailcount: 22
+Tailcount: 16
+	9 : { 10, 60, 20 }
+Tailcount: 11
 	9 : { 10, 60, 70 }
-Tailcount: 15
-	Total number of frequent 3-itemsets = 2
+Tailcount: 8
+	27 : { 60, 70, 50 }
+Tailcount: 37
+	Total number of frequent 3-itemsets = 4
 

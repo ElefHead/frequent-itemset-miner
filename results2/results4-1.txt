@@ -20,6 +20,6 @@ Tailcount: 58
 
 Frequent 3-itemsets: 
 	20 : { 30, 60, 50 }
-Tailcount: 46
+Tailcount: 19
 	Total number of frequent 3-itemsets = 1
 

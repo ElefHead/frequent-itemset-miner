@@ -110,8 +110,9 @@ def msCandidateGen(F,L,constraints,k,num_transactions):
 				c = f1 + [f2last]
 				notfrequent = False
 				for i in combinations(c, k):
-					if str(list(i)) not in frequentSet:
-						notfrequent = True
+					if str(c[0]) in str(list(i) or constraints[c[0]]==constraints[c[1]]):
+						if str(list(i)) not in frequentSet:
+							notfrequent = True
 				if not notfrequent:
 					candidate.append([c,0])
 	return candidate
