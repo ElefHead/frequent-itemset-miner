@@ -65,18 +65,16 @@ def msApriori():
 						if candidate != []:
 							for transaction in f.getTransactions(setnumber=number):
 								set_transaction = set(transaction)
-								tailset = set()
 								for c in candidate:
 									set_c = set(c[0])
 									set_tail = set(c[0][1:])
 									if set_transaction.union(set_c) == set_transaction :
 										c[1]+=1
-									if set_tail.issubset(set_transaction) and not set_tail.issubset(tailset) :
-										tailset.update(set_tail)
-										if str(c[0][1:]) in tailcounts :
-											tailcounts[str(c[0][1:])] += 1
+									if set_tail.issubset(set_transaction):
+										if str(c[0]) in tailcounts :
+											tailcounts[str(c[0])] += 1
 										else:
-											tailcounts[str(c[0][1:])] = 1
+											tailcounts[str(c[0])] = 1
 						frequent = [c for c in candidate if c[1]/num_transactions>=constraints['constraints'][num_constraints][c[0][0]]]
 						f.writeFrequentItemset(specificConstraints(frequent,constraints['constraints'][num_constraints]['not_together'],constraints['constraints'][num_constraints]['must_have'],k),tailcounts,k,number,constraints['count'][num_constraints])
 			except Exception:
@@ -110,8 +108,9 @@ def msCandidateGen(F,L,constraints,k,num_transactions):
 				c = f1 + [f2last]
 				notfrequent = False
 				for i in combinations(c, k):
-					if str(list(i)) not in frequentSet:
-						notfrequent = True
+					if {c[1]} in set(i) or constraints[c[0]]==constraints[c[1]]:
+						if str(list(i)) not in frequentSet:
+							notfrequent = True
 				if not notfrequent:
 					candidate.append([c,0])
 	return candidate

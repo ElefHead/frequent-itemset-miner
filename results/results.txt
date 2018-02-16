@@ -1,11 +1,11 @@
 Frequent 1-itemsets: 
-	6 : { 20 }
+	6 : { bread }
 	Total number of frequent 1-itemsets = 1
 
 Frequent 2-itemsets: 
-	6 : { 80, 20 }
+	6 : { jam, bread }
 Tailcount: 6
-	2 : { 90, 50 }
+	2 : { nutella, cookiecrisps }
 Tailcount: 2
 	Total number of frequent 2-itemsets = 2
 

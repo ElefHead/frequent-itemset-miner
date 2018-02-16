@@ -1,5 +1,5 @@
-{20, 30, 80, 70, 50, 90}
-{20, 10, 80, 70}{10, 20, 80}
-{20, 30, 80}
-{20, 80}
-{20, 30, 80, 70, 50, 90, 100, 120, 140}
+{bread, butter, jam, corn-flakes, cookiecrisps, nutella}
+{bread, peanutbutter, jam, corn-flakes}{peanutbutter, bread, jam}
+{bread, butter, jam}
+{bread, jam}
+{bread, butter, jam, corn-flakes, cookiecrisps, nutella, jalapeno, cucumberpickle, Guacamole}

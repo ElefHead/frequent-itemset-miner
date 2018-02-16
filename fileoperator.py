@@ -15,7 +15,7 @@ def getNextTransaction(reader):
 
 
 class FileOperator :
-	def __init__(self, datapath="", data="data", params="params", results="results"):
+	def __init__(self, datapath="./", data="data", params="params", results="results"):
 		self._path = datapath
 		self._data = {
 			"data":data,
@@ -120,5 +120,5 @@ class FileOperator :
 				else:
 					for i in range(numfreq):
 						w.write("\t"+str(frequent[i][1])+" : { "+ ", ".join([str (x) for x in frequent[i][0]])+" }\n")
-						w.write("Tailcount: "+str(tailcounts[str(frequent[i][0][1:])])+"\n")
+						w.write("Tailcount: "+str(tailcounts[str(frequent[i][0])])+"\n")
 				w.write("\tTotal number of frequent "+str(k)+"-itemsets = "+str(numfreq)+"\n\n")

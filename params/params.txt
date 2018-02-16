@@ -1,15 +1,15 @@
-MIS(10) = 0.43
-MIS(20) = 0.30
-MIS(30) = 0.30
-MIS(40) = 0.40
-MIS(50) = 0.40
-MIS(60) = 0.30
-MIS(70) = 0.20
-MIS(80) = 0.20
-MIS(90) = 0.20
-MIS(100) = 0.10
-MIS(120) = 0.20
-MIS(140) = 0.15
+MIS(peanutbutter) = 0.43
+MIS(bread) = 0.30
+MIS(butter) = 0.30
+MIS(pudding) = 0.40
+MIS(cookiecrisps) = 0.40
+MIS(yogurt) = 0.30
+MIS(corn-flakes) = 0.20
+MIS(jam) = 0.20
+MIS(nutella) = 0.20
+MIS(jalapeno) = 0.10
+MIS(cucumberpickle) = 0.20
+MIS(guacamole) = 0.15
 SDC = 0.1
-cannot_be_together: {20, 40}, {70, 80}
-must-have: 20 or 40 or 50
+cannot_be_together: {bread, pudding}, {corn-flakes, jam}
+must-have: bread or pudding or cookiecrisps
